@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { HexColorPicker } from 'react-colorful';
 import { parseHexColor } from '../theme/model';
+import { CopyButton } from '../ui/CopyButton';
 
 interface ColorFieldProps {
   label: string;
@@ -61,6 +62,7 @@ export function ColorField({ label, value, onChange }: ColorFieldProps) {
             isValid ? 'border-zinc-700' : 'border-red-500'
           }`}
         />
+        <CopyButton value={value} label={`Copy ${label} color`} />
       </span>
     </div>
   );
