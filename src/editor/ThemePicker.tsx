@@ -1,22 +1,22 @@
 import type { Theme } from '../theme/model';
 
-interface PresetPickerProps {
-  presets: readonly Theme[];
+interface ThemePickerProps {
+  themes: readonly Theme[];
   activeId: string;
   onSelect: (theme: Theme) => void;
 }
 
-export function PresetPicker({ presets, activeId, onSelect }: PresetPickerProps) {
+export function ThemePicker({ themes, activeId, onSelect }: ThemePickerProps) {
   return (
     <ul className="grid grid-cols-3 gap-2">
-      {presets.map((preset) => {
-        const isActive = preset.id === activeId;
+      {themes.map((theme) => {
+        const isActive = theme.id === activeId;
 
         return (
-          <li key={preset.id}>
+          <li key={theme.id}>
             <button
               type="button"
-              onClick={() => onSelect(preset)}
+              onClick={() => onSelect(theme)}
               aria-pressed={isActive}
               className={`flex w-full flex-col gap-2 rounded-lg border p-2 text-left text-xs transition-colors ${
                 isActive ? 'border-zinc-300 bg-zinc-800' : 'border-zinc-800 hover:border-zinc-600'
@@ -25,19 +25,19 @@ export function PresetPicker({ presets, activeId, onSelect }: PresetPickerProps)
               {/* Swatch: background with an up and a down bar */}
               <div
                 className="flex h-10 items-end justify-center gap-1.5 rounded border border-zinc-700 pb-2"
-                style={{ backgroundColor: preset.colors.background }}
+                style={{ backgroundColor: theme.colors.background }}
               >
                 <div
                   className="h-5 w-2 rounded-sm"
-                  style={{ backgroundColor: preset.colors.upBody }}
+                  style={{ backgroundColor: theme.colors.upBody }}
                 />
                 <div
                   className="h-3 w-2 rounded-sm"
-                  style={{ backgroundColor: preset.colors.downBody }}
+                  style={{ backgroundColor: theme.colors.downBody }}
                 />
               </div>
 
-              <span>{preset.name}</span>
+              <span>{theme.name}</span>
             </button>
           </li>
         );

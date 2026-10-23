@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { COLOR_KEYS, COLOR_LABELS, type Theme } from './theme/model';
 import { CandleChart } from './chart/CandleChart';
-import { PresetPicker } from './editor/PresetPicker';
+import { ThemePicker } from './editor/ThemePicker';
 import { ColorField } from './editor/ColorField';
 import { CandleControls } from './chart/CandleControls';
 import { useThemeEditor } from './editor/useThemeEditor';
@@ -52,11 +52,18 @@ export default function App() {
 
       <aside className="space-y-4 p-4">
         <h1 className="text-lg font-semibold">Theme Playground</h1>
-        <PresetPicker
-          presets={PRESET_THEMES}
+        <ThemePicker
+          themes={PRESET_THEMES}
           activeId={editor.base.id}
-          onSelect={(preset) => editor.loadTheme(presetAsCopy(preset))}
+          onSelect={(theme) => editor.loadTheme(presetAsCopy(theme))}
         />
+        {/* Saved themes section */}
+        <ThemePicker
+          themes={savedThemes.themes}
+          activeId={editor.base.id}
+          onSelect={(theme) => editor.loadTheme(theme)}
+        />
+
         <input
           type="text"
           value={editor.themeName}
