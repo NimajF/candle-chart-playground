@@ -31,6 +31,25 @@ export default function App() {
     editor.loadTheme(theme);
   }
 
+  function handleSelectTheme(theme: Theme) {
+    if (!confirmDiscardChanges()) return;
+    editor.loadTheme(theme);
+  }
+
+  function handleDelete(theme: Theme) {
+    if (!window.confirm(`Are you sure you want to delete the theme "${theme.name}"?`)) return;
+    savedThemes.deleteTheme(theme.id);
+    // If the deleted theme is the one being edited, fall back to the first preset.
+    if (theme.id === editor.base.id) editor.loadTheme(presetAsCopy(PRESET_THEMES[0]));
+  }
+
+  function confirmDiscardChanges(): boolean {
+    if (!editor.isDirty) return true;
+    return window.confirm(
+      'You have unsaved changes. Are you sure you want to discard them and switch themes?',
+    );
+  }
+
   function handleRandomizeCandles() {
     const randomParams = generateRandomCandlesParams();
     setCandleParams(randomParams);
@@ -55,13 +74,14 @@ export default function App() {
         <ThemePicker
           themes={PRESET_THEMES}
           activeId={editor.base.id}
-          onSelect={(theme) => editor.loadTheme(presetAsCopy(theme))}
+          onSelect={(theme) => handleSelectTheme(presetAsCopy(theme))}
         />
         {/* Saved themes section */}
         <ThemePicker
           themes={savedThemes.themes}
           activeId={editor.base.id}
-          onSelect={(theme) => editor.loadTheme(theme)}
+          onSelect={handleSelectTheme}
+          onDelete={handleDelete}
         />
 
         <input
