@@ -1,1 +1,12 @@
 @import 'tailwindcss';
+
+.react-colorful {
+  width: 220px;
+  height: 200px;
+}
+.react-colorful__saturation {
+  border-radius: 8px 8px 0 0;
+}
+.react-colorful__hue {
+  border-radius: 0 0 8px 8px;
+}

@@ -80,3 +80,15 @@ export const PRESET_THEMES: readonly Theme[] = [
     },
   },
 ];
+
+export function isPresetId(id: string): boolean {
+  return PRESET_THEMES.some((theme) => theme.id === id);
+}
+
+export function presetAsCopy(preset: Theme): Theme {
+  return {
+    id: preset.id,
+    name: `${preset.name} Copy`,
+    colors: { ...preset.colors },
+  };
+}

@@ -5,3 +5,9 @@ export interface Candle {
   readonly low: number;
   readonly close: number;
 }
+
+export interface CandleParams {
+  readonly count: number;
+  readonly drift: number; // daily trend, 0.01 = +1% per day
+  readonly volatility: number; // typical daily move, 0.02 = 2%
+}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { HexColorPicker } from 'react-colorful';
 import { parseHexColor } from '../theme/model';
 
 interface ColorFieldProps {
@@ -9,6 +10,7 @@ interface ColorFieldProps {
 
 export function ColorField({ label, value, onChange }: ColorFieldProps) {
   const [draft, setDraft] = useState<string | null>(null); // null = not typing.
+  const [open, setOpen] = useState(false);
 
   const text = draft ?? value; // if typing, show the draft, otherwise show the actual value.
   const isValid = parseHexColor(text) !== null;
@@ -20,15 +22,34 @@ export function ColorField({ label, value, onChange }: ColorFieldProps) {
   }
 
   return (
-    <label className="flex items-center justify-between gap-3 text-sm">
+    <div className="flex items-center justify-between gap-3 text-sm">
       <span>{label}</span>
       <span className="flex items-center gap-2">
-        <input
-          type="color"
-          value={value}
-          onChange={(e) => onChange(parseHexColor(e.target.value) ?? value)}
-          className="h-7 w-9 cursor-pointer rounded border border-zinc-700 bg-transparent"
-        />
+        <span className="relative">
+          <button
+            type="button"
+            onClick={() => setOpen(!open)}
+            style={{ backgroundColor: value }}
+            className="h-7 w-9 cursor-pointer rounded border border-zinc-800"
+            aria-label={`Pick ${label} color`}
+          />
+          {open && (
+            <>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="fixed inset-0 cursor-default"
+                aria-label="Close color picker"
+              />
+              <div className="absolute right-0 z-10 mt-2 rounded-xl border border-zinc-700 bg-zinc-900 p-3 shadow-2xl shadow-black/60">
+                <HexColorPicker
+                  color={value}
+                  onChange={(c) => onChange(parseHexColor(c) ?? value)}
+                />
+              </div>
+            </>
+          )}
+        </span>
         <input
           type="text"
           value={text}
@@ -41,6 +62,6 @@ export function ColorField({ label, value, onChange }: ColorFieldProps) {
           }`}
         />
       </span>
-    </label>
+    </div>
   );
 }
