@@ -77,12 +77,14 @@ export default function App() {
       <aside className="space-y-4 p-4">
         <h1 className="text-lg font-semibold">Theme Playground</h1>
         <ThemePicker
+          title="Presets"
           themes={PRESET_THEMES}
           activeId={editor.base.id}
           onSelect={(theme) => handleSelectTheme(presetAsCopy(theme))}
         />
-        {/* Saved themes section */}
         <ThemePicker
+          title="Saved"
+          emptyMessage="No saved themes yet. Edit a theme and press Save."
           themes={savedThemes.themes}
           activeId={editor.base.id}
           onSelect={handleSelectTheme}
