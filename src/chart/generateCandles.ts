@@ -39,14 +39,14 @@ export function generateCandles({ count, drift, volatility }: CandleParams): Can
 
 export function generateRandomCandlesParams(): CandleParams {
   return {
-    count: 60,
+    count: 120,
     drift: randomBetween(-0.008, 0.008),
     volatility: randomBetween(0.008, 0.03),
   };
 }
 
 export const DEFAULT_CANDLE_PARAMS: CandleParams = {
-  count: 60,
+  count: 120,
   drift: 0,
   volatility: 0.015,
 };
