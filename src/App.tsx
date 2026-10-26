@@ -31,6 +31,11 @@ export default function App() {
     editor.loadTheme(theme);
   }
 
+  function handleReset() {
+    if (!window.confirm('Are you sure you want to reset the theme to its original state?')) return;
+    editor.reset();
+  }
+
   function handleSelectTheme(theme: Theme) {
     if (!confirmDiscardChanges()) return;
     editor.loadTheme(theme);
@@ -109,8 +114,21 @@ export default function App() {
             </li>
           ))}
         </ul>
-        <button type="button" onClick={handleSave}>
+        <button
+          type="button"
+          onClick={handleSave}
+          className="w-full rounded-lg bg-emerald-400 px-3 py-2.5 text-sm font-semibold tracking-wide text-zinc-950 shadow-sm shadow-black/20 transition-colors hover:bg-emerald-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-400/30 disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-400 disabled:opacity-70 disabled:shadow-none disabled:hover:bg-zinc-700"
+          disabled={!editor.isDirty}
+        >
           Save
+        </button>
+        <button
+          type="button"
+          onClick={handleReset}
+          className="w-full rounded-lg bg-zinc-700 px-3 py-2.5 text-sm font-semibold tracking-wide text-zinc-100 shadow-sm shadow-black/20 transition-colors hover:bg-zinc-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-600/30 disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-400 disabled:opacity-70 disabled:shadow-none disabled:hover:bg-zinc-700"
+          disabled={!editor.isDirty}
+        >
+          Reset
         </button>
       </aside>
     </div>
