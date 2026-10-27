@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { COLOR_KEYS, type ColorKey, type Theme } from '../theme/model';
+import { COLOR_KEYS, type ColorKey, type Theme, type ThemeColors } from '../theme/model';
 
 export function useThemeEditor(initialTheme: Theme) {
   const [base, setBase] = useState<Theme>(initialTheme); // the loaded theme, never modified
@@ -19,9 +19,23 @@ export function useThemeEditor(initialTheme: Theme) {
     setColors((prev) => ({ ...prev, [key]: value }));
   }
 
+  function setAllColors(newColors: ThemeColors) {
+    setColors(newColors);
+  }
+
   function reset() {
     setThemeName(base.name);
     setColors(base.colors);
   }
-  return { base, colors, themeName, setThemeName, isDirty, loadTheme, setColor, reset };
+  return {
+    base,
+    colors,
+    themeName,
+    setThemeName,
+    isDirty,
+    loadTheme,
+    setColor,
+    reset,
+    setAllColors,
+  };
 }

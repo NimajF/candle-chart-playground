@@ -1,8 +1,5 @@
 import type { Candle, CandleParams } from './types';
-
-function randomBetween(min: number, max: number): number {
-  return Math.random() * (max - min) + min; // Random num between min and max
-}
+import { randomBetween } from '../utils/random';
 
 function round2(value: number): number {
   return Math.round(value * 100) / 100; // Round to 2 decimal places
