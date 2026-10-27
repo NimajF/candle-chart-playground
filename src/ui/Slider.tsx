@@ -13,7 +13,7 @@ export function Slider({ label, value, min, max, step, display, onChange }: Slid
     <label className="block space-y-1 text-sm">
       <span className="flex justify-between">
         <span>{label}</span>
-        <span className="font-mono text-zinc-400">{display}</span>
+        <span className="font-data text-fg-muted">{display}</span>
       </span>
       <input
         type="range"
@@ -22,7 +22,7 @@ export function Slider({ label, value, min, max, step, display, onChange }: Slid
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full cursor-pointer accent-emerald-400"
+        className="w-full cursor-pointer accent-accent"
       />
     </label>
   );

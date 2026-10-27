@@ -20,10 +20,10 @@ export function ThemePicker({
 }: ThemePickerProps) {
   return (
     <section className="space-y-2">
-      <h2 className="text-xs font-semibold tracking-wide text-zinc-400 uppercase">{title}</h2>
+      <h2 className="text-label text-fg-faint uppercase">{title}</h2>
 
       {themes.length === 0 && emptyMessage ? (
-        <p className="rounded-lg border border-dashed border-zinc-800 p-3 text-xs text-zinc-500">
+        <p className="rounded-card border border-dashed border-line p-3 text-xs text-fg-faint">
           {emptyMessage}
         </p>
       ) : (
@@ -37,14 +37,14 @@ export function ThemePicker({
                   type="button"
                   onClick={() => onSelect(theme)}
                   aria-pressed={isActive}
-                  className={`flex w-full flex-col gap-2 rounded-lg border p-2 text-left text-xs transition-colors ${
+                  className={`flex w-full cursor-pointer flex-col gap-2 rounded-card border p-2 text-left text-xs transition-colors duration-150 ease-soft ${
                     isActive
-                      ? 'border-zinc-300 bg-zinc-800'
-                      : 'border-zinc-800 hover:border-zinc-600'
+                      ? 'border-accent-line bg-accent-soft'
+                      : 'border-line bg-surface hover:border-line-strong hover:bg-hover'
                   }`}
                 >
                   <div
-                    className="flex h-10 items-end justify-center gap-1.5 rounded border border-zinc-700 pb-2"
+                    className="flex h-10 items-end justify-center gap-1.5 rounded-control border border-line pb-2"
                     style={{ backgroundColor: theme.colors.background }}
                   >
                     <div
@@ -66,7 +66,7 @@ export function ThemePicker({
                     onClick={() => onDelete(theme)}
                     aria-label={`Delete ${theme.name}`}
                     title={`Delete ${theme.name}`}
-                    className="absolute top-1 right-1 cursor-pointer rounded bg-zinc-900/80 p-1 text-zinc-400 opacity-0 transition-opacity group-hover:opacity-100 hover:text-red-400 focus-visible:opacity-100"
+                    className="absolute top-1 right-1 cursor-pointer rounded-control bg-surface-raised p-1 text-fg-muted opacity-0 transition-opacity group-hover:opacity-100 hover:text-danger focus-visible:opacity-100"
                   >
                     <TrashIcon size={14} />
                   </button>

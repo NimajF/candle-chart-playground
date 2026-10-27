@@ -21,10 +21,10 @@ export function CopyButton({ value, label }: CopyButtonProps) {
       onClick={handleCopy}
       aria-label={label}
       title={label}
-      className="cursor-pointer rounded p-1 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+      className="cursor-pointer rounded-control p-1 text-fg-muted hover:bg-hover hover:text-fg"
     >
       {copied ? (
-        <CheckIcon size={16} weight="bold" className="text-emerald-400" />
+        <CheckIcon size={16} weight="bold" className="text-accent" />
       ) : (
         <CopyIcon size={16} />
       )}

@@ -4,12 +4,13 @@ import { parseHexColor } from '../theme/model';
 import { CopyButton } from '../ui/CopyButton';
 
 interface ColorFieldProps {
-  label: string;
+  label: string; // not shown, used for accessibility
   value: string;
   onChange: (value: string) => void;
+  popoverAlign?: 'left' | 'right'; // which edge the picker popover sticks to
 }
 
-export function ColorField({ label, value, onChange }: ColorFieldProps) {
+export function ColorField({ label, value, onChange, popoverAlign = 'left' }: ColorFieldProps) {
   const [draft, setDraft] = useState<string | null>(null); // null = not typing.
   const [open, setOpen] = useState(false);
 
@@ -23,47 +24,49 @@ export function ColorField({ label, value, onChange }: ColorFieldProps) {
   }
 
   return (
-    <div className="flex items-center justify-between gap-3 text-sm">
-      <span>{label}</span>
-      <span className="flex items-center gap-2">
-        <span className="relative">
-          <button
-            type="button"
-            onClick={() => setOpen(!open)}
-            style={{ backgroundColor: value }}
-            className="h-7 w-9 cursor-pointer rounded border border-zinc-800"
-            aria-label={`Pick ${label} color`}
-          />
-          {open && (
-            <>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="fixed inset-0 cursor-default"
-                aria-label="Close color picker"
-              />
-              <div className="absolute right-0 z-10 mt-2 rounded-xl border border-zinc-700 bg-zinc-900 p-3 shadow-2xl shadow-black/60">
-                <HexColorPicker
-                  color={value}
-                  onChange={(c) => onChange(parseHexColor(c) ?? value)}
-                />
-              </div>
-            </>
-          )}
-        </span>
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => handleTextChange(e.target.value)}
-          onBlur={() => setDraft(null)}
-          spellCheck={false}
-          maxLength={7}
-          className={`w-20 rounded border bg-zinc-900 px-2 py-1 font-mono uppercase ${
-            isValid ? 'border-zinc-700' : 'border-red-500'
-          }`}
-        />
+    <div
+      className={`group relative flex min-w-0 items-center gap-1 rounded-control border bg-field p-1 transition-colors duration-150 ease-soft focus-within:border-accent-line ${
+        isValid ? 'border-line hover:border-line-strong' : 'border-danger'
+      }`}
+    >
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        style={{ backgroundColor: value }}
+        className="size-5 shrink-0 cursor-pointer rounded-[6px] border border-line-strong"
+        aria-label={`Pick ${label} color`}
+      />
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => handleTextChange(e.target.value)}
+        onBlur={() => setDraft(null)}
+        spellCheck={false}
+        maxLength={7}
+        aria-label={`${label} hex value`}
+        className="w-[7ch] min-w-0 flex-1 bg-transparent font-data text-xs text-fg uppercase outline-none"
+      />
+      <span className="opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
         <CopyButton value={value} label={`Copy ${label} color`} />
       </span>
+
+      {open && (
+        <>
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 z-10 cursor-default"
+            aria-label="Close color picker"
+          />
+          <div
+            className={`absolute top-full z-20 mt-2 rounded-card bg-surface-raised p-3 shadow-popover ${
+              popoverAlign === 'left' ? 'left-0' : 'right-0'
+            }`}
+          >
+            <HexColorPicker color={value} onChange={(c) => onChange(parseHexColor(c) ?? value)} />
+          </div>
+        </>
+      )}
     </div>
   );
 }
