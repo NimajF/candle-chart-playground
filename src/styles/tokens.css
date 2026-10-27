@@ -1,0 +1,95 @@
+/*
+  App appearance tokens (light / dark). Not related to the candle themes.
+  Dark is the default. Light applies with <html data-theme="light">.
+  Each token becomes a Tailwind utility: --color-surface -> bg-surface, text-fg-muted, border-line...
+*/
+
+@theme {
+  /* Surfaces */
+  --color-canvas: #08090c; /* app background, behind the panels */
+  --color-surface: #0e1115; /* panels */
+  --color-surface-raised: #13171d; /* cards, popovers */
+  --color-field: #0a0d10; /* inputs, sliders, segmented controls */
+  --color-hover: #161b22;
+
+  /* Borders */
+  --color-line: #1d2229;
+  --color-line-strong: #2a313a;
+
+  /* Text */
+  --color-fg: #e8ecf1;
+  --color-fg-muted: #949daa;
+  --color-fg-faint: #737c89; /* labels only, still AA on surface */
+
+  /* Accent: active state and the main action only */
+  --color-accent: #c6f24e;
+  --color-accent-hover: #d4f86b;
+  --color-accent-fg: #0b1003; /* text on top of accent */
+  --color-accent-soft: rgb(198 242 78 / 0.1);
+  --color-accent-line: rgb(198 242 78 / 0.45);
+
+  --color-danger: #ff6464;
+
+  /*
+    Shadows: Tailwind copies shadow values straight into the utility class,
+    so they point to the --app-shadow-* variables below to stay switchable per theme.
+  */
+  --shadow-panel: var(--app-shadow-panel);
+  --shadow-popover: var(--app-shadow-popover);
+  --shadow-accent: var(--app-shadow-accent);
+
+  /* Radius: rounded-panel, rounded-card, rounded-control */
+  --radius-panel: 14px;
+  --radius-card: 11px;
+  --radius-control: 9px;
+
+  /* Fonts: font-ui for the interface, font-data for numbers and hex values */
+  --font-ui: 'Inter', system-ui, 'Segoe UI', sans-serif;
+  --font-data: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+
+  /* Section labels like PRESETS / CANVAS: text-label + uppercase */
+  --text-label: 0.65625rem;
+  --text-label--letter-spacing: 0.14em;
+  --text-label--font-weight: 600;
+
+  /* Motion: ease-soft, use with duration-150 */
+  --ease-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+:root {
+  color-scheme: dark;
+
+  --app-shadow-panel: inset 0 1px 0 rgb(255 255 255 / 0.025), 0 16px 40px -24px rgb(0 0 0 / 0.8);
+  --app-shadow-popover: 0 0 0 1px #2a313a, 0 24px 48px -12px rgb(0 0 0 / 0.6);
+  --app-shadow-accent: 0 0 0 1px rgb(198 242 78 / 0.25), 0 8px 22px -10px rgb(198 242 78 / 0.7);
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  --color-canvas: #f3f5f8;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-field: #f6f8fa;
+  --color-hover: #eef1f5;
+
+  --color-line: #e3e7ec;
+  --color-line-strong: #cfd5dd;
+
+  --color-fg: #0f1419;
+  --color-fg-muted: #525c69;
+  --color-fg-faint: #6b7480;
+
+  /* Lime is too light on white, so light mode uses a deep green from the same family */
+  --color-accent: #4d7c0f;
+  --color-accent-hover: #3f6212;
+  --color-accent-fg: #ffffff;
+  --color-accent-soft: rgb(77 124 15 / 0.1);
+  --color-accent-line: rgb(77 124 15 / 0.45);
+
+  --color-danger: #d92d20;
+
+  --app-shadow-panel: 0 1px 2px rgb(15 20 25 / 0.04), 0 12px 32px -20px rgb(15 20 25 / 0.18);
+  --app-shadow-popover: 0 0 0 1px #cfd5dd, 0 24px 48px -16px rgb(15 20 25 / 0.25);
+  --app-shadow-accent: 0 0 0 1px rgb(77 124 15 / 0.2), 0 8px 20px -10px rgb(77 124 15 / 0.5);
+}
