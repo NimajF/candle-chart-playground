@@ -16,6 +16,9 @@ interface CandleChartProps {
   candles: readonly Candle[];
 }
 
+const RIGHT_OFFSET = 5; // empty bars after the last candle
+const MAX_VISIBLE = 100; // dont squeeze huge series
+
 export function CandleChart({ colors, candles }: CandleChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
@@ -29,7 +32,7 @@ export function CandleChart({ colors, candles }: CandleChartProps) {
     const chart = createChart(container, {
       autoSize: true,
       grid: { vertLines: { visible: false }, horzLines: { visible: false } },
-      timeScale: { rightOffset: 5 },
+      timeScale: { rightOffset: RIGHT_OFFSET },
       crosshair: { mode: CrosshairMode.Normal },
     });
 
@@ -45,12 +48,16 @@ export function CandleChart({ colors, candles }: CandleChartProps) {
     };
   }, []);
 
-  // Update the series data whenever the candles prop changes. Fit the time scale to the new data.
+  // Load new candles and reset the view: auto-fit prices, show the last MAX_VISIBLE bars plus RIGHT_OFFSET empty space.
   useEffect(() => {
+    const chart = chartRef.current;
     seriesRef.current?.setData([...candles]);
-    chartRef.current?.timeScale().setVisibleLogicalRange({
-      from: candles.length - 100,
-      to: candles.length,
+    chart?.priceScale('right').applyOptions({ autoScale: true });
+
+    const visible = Math.min(candles.length, MAX_VISIBLE);
+    chart?.timeScale().setVisibleLogicalRange({
+      from: candles.length - visible,
+      to: candles.length - 1 + RIGHT_OFFSET,
     });
   }, [candles]);
 
