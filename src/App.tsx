@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAppTheme } from './app-theme/useAppTheme';
 import { ThemeToggle } from './ui/ThemeToggle';
 import type { Theme } from './theme/model';
+import type { Candle, CandleParams } from './chart/types';
 import { CandleChart } from './chart/CandleChart';
 import { ThemePicker } from './editor/ThemePicker';
 import { ColorEditor } from './editor/ColorEditor';
@@ -10,7 +11,9 @@ import { generateRandomCandlesColors, type ColorLocks } from './theme/randomColo
 import { useThemeEditor } from './editor/useThemeEditor';
 import { useSavedThemes } from './saved-themes/useSavedThemes';
 import { ConfirmDialog, type ConfirmRequest } from './ui/ConfirmDialog';
-import type { Candle, CandleParams } from './chart/types';
+import { useFullscreen } from './layout/useFullscreen';
+import { FullscreenToggle } from './ui/FullscreenToggle';
+
 import {
   DEFAULT_CANDLE_PARAMS,
   generateCandles,
@@ -20,6 +23,8 @@ import { PRESET_THEMES, isPresetId, presetAsCopy } from './theme/presets';
 
 export default function App() {
   const appTheme = useAppTheme();
+  const fullscreen = useFullscreen();
+  const isFullscreen = fullscreen.isFullscreen;
 
   const [candles, setCandles] = useState<readonly Candle[]>(() =>
     generateCandles(DEFAULT_CANDLE_PARAMS),
@@ -94,14 +99,29 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-dvh bg-canvas text-fg lg:grid lg:grid-cols-[1fr_22rem]">
-      <section className="sticky top-0 z-10 h-[45dvh] border-b border-line bg-canvas p-4 lg:h-dvh lg:border-r lg:border-b-0">
-        <div className="h-full overflow-hidden rounded-panel">
+    <div
+      className={
+        isFullscreen
+          ? 'h-dvh bg-canvas text-fg'
+          : 'min-h-dvh bg-canvas text-fg lg:grid lg:grid-cols-[minmax(0,1fr)_22rem]'
+      }
+    >
+      <section
+        className={
+          isFullscreen
+            ? 'h-dvh bg-canvas'
+            : 'sticky top-0 z-10 h-[45dvh] border-b border-line bg-canvas p-4 lg:h-dvh lg:border-r lg:border-b-0'
+        }
+      >
+        <div className={`relative h-full overflow-hidden ${isFullscreen ? '' : 'rounded-panel'}`}>
           <CandleChart colors={editor.colors} candles={candles} />
+          <div className="absolute top-3 left-3 z-10">
+            <FullscreenToggle isFullscreen={isFullscreen} onToggle={fullscreen.toggleFullscreen} />
+          </div>
         </div>
       </section>
 
-      <aside className="space-y-4 p-4">
+      <aside className={isFullscreen ? 'hidden' : 'space-y-4 p-4'}>
         <header className="flex items-center justify-between">
           <h1 className="text-lg font-semibold">Theme Playground</h1>
           <ThemeToggle theme={appTheme.theme} onToggle={appTheme.toggleTheme} />
