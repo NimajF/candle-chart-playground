@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import { COLOR_KEYS, COLOR_LABELS, type Theme } from './theme/model';
+import { useAppTheme } from './app-theme/useAppTheme';
+import { ThemeToggle } from './ui/ThemeToggle';
+import type { Theme } from './theme/model';
 import { CandleChart } from './chart/CandleChart';
 import { ThemePicker } from './editor/ThemePicker';
-import { ColorField } from './editor/ColorField';
+import { ColorEditor } from './editor/ColorEditor';
 import { CandleControls } from './chart/CandleControls';
+import { generateRandomCandlesColors, type ColorLocks } from './theme/randomColors';
 import { useThemeEditor } from './editor/useThemeEditor';
 import { useSavedThemes } from './saved-themes/useSavedThemes';
+import { ConfirmDialog, type ConfirmRequest } from './ui/ConfirmDialog';
 import type { Candle, CandleParams } from './chart/types';
-import { SAMPLE_CANDLES } from './chart/data';
 import {
   DEFAULT_CANDLE_PARAMS,
   generateCandles,
@@ -16,10 +19,16 @@ import {
 import { PRESET_THEMES, isPresetId, presetAsCopy } from './theme/presets';
 
 export default function App() {
-  const [candles, setCandles] = useState<readonly Candle[]>(SAMPLE_CANDLES);
+  const appTheme = useAppTheme();
+
+  const [candles, setCandles] = useState<readonly Candle[]>(() =>
+    generateCandles(DEFAULT_CANDLE_PARAMS),
+  );
   const [candleParams, setCandleParams] = useState<CandleParams>(DEFAULT_CANDLE_PARAMS);
   const editor = useThemeEditor(presetAsCopy(PRESET_THEMES[0]));
   const savedThemes = useSavedThemes();
+
+  const [pendingConfirm, setPendingConfirm] = useState<ConfirmRequest | null>(null);
 
   function handleSave() {
     const theme: Theme = {
@@ -32,27 +41,41 @@ export default function App() {
   }
 
   function handleReset() {
-    if (!window.confirm('Are you sure you want to reset the theme to its original state?')) return;
-    editor.reset();
+    setPendingConfirm({
+      title: 'Reset theme?',
+      message: 'Your unsaved changes will be lost.',
+      confirmLabel: 'Reset',
+      danger: true,
+      onConfirm: editor.reset,
+    });
   }
 
   function handleSelectTheme(theme: Theme) {
-    if (!confirmDiscardChanges()) return;
-    editor.loadTheme(theme);
+    if (!editor.isDirty) {
+      editor.loadTheme(theme);
+      return;
+    }
+    setPendingConfirm({
+      title: 'Discard changes?',
+      message: 'You have unsaved changes. Switching themes will discard them.',
+      confirmLabel: 'Discard',
+      danger: true,
+      onConfirm: () => editor.loadTheme(theme),
+    });
   }
 
   function handleDelete(theme: Theme) {
-    if (!window.confirm(`Are you sure you want to delete the theme "${theme.name}"?`)) return;
-    savedThemes.deleteTheme(theme.id);
-    // If the deleted theme is the one being edited, fall back to the first preset.
-    if (theme.id === editor.base.id) editor.loadTheme(presetAsCopy(PRESET_THEMES[0]));
-  }
-
-  function confirmDiscardChanges(): boolean {
-    if (!editor.isDirty) return true;
-    return window.confirm(
-      'You have unsaved changes. Are you sure you want to discard them and switch themes?',
-    );
+    setPendingConfirm({
+      title: `Delete "${theme.name}"?`,
+      message: "This can't be undone.",
+      confirmLabel: 'Delete',
+      danger: true,
+      onConfirm: () => {
+        savedThemes.deleteTheme(theme.id);
+        // If the deleted theme is the one being edited, fall back to the first preset.
+        if (theme.id === editor.base.id) editor.loadTheme(presetAsCopy(PRESET_THEMES[0]));
+      },
+    });
   }
 
   function handleRandomizeCandles() {
@@ -61,21 +84,29 @@ export default function App() {
     setCandles(generateCandles(randomParams));
   }
 
+  function handleRandomizeCandleColors(locks: ColorLocks) {
+    editor.setAllColors(generateRandomCandlesColors(editor.colors, locks));
+  }
+
   // Generates new candles based on the current candleParams state
   function handleApplyCandleParams() {
     setCandles(generateCandles(candleParams));
   }
 
   return (
-    <div className="min-h-dvh bg-zinc-950 text-zinc-100 lg:grid lg:grid-cols-[1fr_22rem]">
-      <section className="sticky top-0 z-10 h-[45dvh] border-b border-zinc-800 bg-zinc-950 p-4 lg:h-dvh lg:border-r lg:border-b-0">
-        <div className="h-full overflow-hidden rounded-lg">
+    <div className="min-h-dvh bg-canvas text-fg lg:grid lg:grid-cols-[1fr_22rem]">
+      <section className="sticky top-0 z-10 h-[45dvh] border-b border-line bg-canvas p-4 lg:h-dvh lg:border-r lg:border-b-0">
+        <div className="h-full overflow-hidden rounded-panel">
           <CandleChart colors={editor.colors} candles={candles} />
         </div>
       </section>
 
       <aside className="space-y-4 p-4">
-        <h1 className="text-lg font-semibold">Theme Playground</h1>
+        <header className="flex items-center justify-between">
+          <h1 className="text-lg font-semibold">Theme Playground</h1>
+          <ThemeToggle theme={appTheme.theme} onToggle={appTheme.toggleTheme} />
+        </header>
+
         <ThemePicker
           title="Presets"
           themes={PRESET_THEMES}
@@ -97,7 +128,7 @@ export default function App() {
           onChange={(e) => editor.setThemeName(e.target.value)}
           placeholder="Theme Name"
           aria-label="Theme name"
-          className="w-full rounded-lg border border-zinc-700 bg-zinc-900/80 px-3 py-2.5 text-sm font-medium tracking-wide text-zinc-100 shadow-sm shadow-black/20 outline-none transition-all duration-200 placeholder:text-zinc-500 hover:border-zinc-500 hover:bg-zinc-900 focus:border-emerald-400 focus:bg-zinc-900 focus:ring-4 focus:ring-emerald-400/15 active:border-emerald-300"
+          className="w-full rounded-control border border-line-strong bg-field px-3 py-2.5 text-sm font-medium tracking-wide text-fg outline-none transition-colors duration-150 ease-soft placeholder:text-fg-faint hover:bg-hover focus:border-accent-line focus:ring-4 focus:ring-accent-soft"
         />
         <CandleControls
           params={candleParams}
@@ -105,21 +136,15 @@ export default function App() {
           onApply={handleApplyCandleParams}
           onRandomize={handleRandomizeCandles}
         />
-        <ul className="space-y-2">
-          {COLOR_KEYS.map((key) => (
-            <li key={key}>
-              <ColorField
-                label={COLOR_LABELS[key]}
-                value={editor.colors[key]}
-                onChange={(color) => editor.setColor(key, color)}
-              />
-            </li>
-          ))}
-        </ul>
+        <ColorEditor
+          colors={editor.colors}
+          onChange={editor.setColor}
+          onRandomize={handleRandomizeCandleColors}
+        />
         <button
           type="button"
           onClick={handleSave}
-          className="w-full rounded-lg bg-emerald-400 px-3 py-2.5 text-sm font-semibold tracking-wide text-zinc-950 shadow-sm shadow-black/20 transition-colors hover:bg-emerald-500 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-400/30 disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-400 disabled:opacity-70 disabled:shadow-none disabled:hover:bg-zinc-700"
+          className="w-full cursor-pointer rounded-control bg-accent px-3 py-2.5 text-sm font-semibold tracking-wide text-accent-fg shadow-accent transition-colors duration-150 ease-soft hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-soft disabled:cursor-not-allowed disabled:bg-field disabled:text-fg-faint disabled:shadow-none"
           disabled={!editor.isDirty}
         >
           Save
@@ -127,12 +152,25 @@ export default function App() {
         <button
           type="button"
           onClick={handleReset}
-          className="w-full rounded-lg bg-zinc-700 px-3 py-2.5 text-sm font-semibold tracking-wide text-zinc-100 shadow-sm shadow-black/20 transition-colors hover:bg-zinc-600 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-zinc-600/30 disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-400 disabled:opacity-70 disabled:shadow-none disabled:hover:bg-zinc-700"
+          className="w-full cursor-pointer rounded-control border border-line-strong bg-field px-3 py-2.5 text-sm font-semibold tracking-wide text-fg transition-colors duration-150 ease-soft hover:bg-hover focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-soft disabled:cursor-not-allowed disabled:border-line disabled:text-fg-faint disabled:hover:bg-field"
           disabled={!editor.isDirty}
         >
           Reset
         </button>
       </aside>
+      {pendingConfirm && (
+        <ConfirmDialog
+          title={pendingConfirm.title}
+          message={pendingConfirm.message}
+          confirmLabel={pendingConfirm.confirmLabel}
+          danger={pendingConfirm.danger}
+          onConfirm={() => {
+            pendingConfirm.onConfirm();
+            setPendingConfirm(null);
+          }}
+          onCancel={() => setPendingConfirm(null)}
+        />
+      )}
     </div>
   );
 }
