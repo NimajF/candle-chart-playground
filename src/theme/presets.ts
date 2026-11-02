@@ -1,6 +1,20 @@
 import type { Theme } from './model';
 
+// The first preset is the app's default theme.
 export const PRESET_THEMES: readonly Theme[] = [
+  {
+    id: 'lime',
+    name: 'Lime',
+    colors: {
+      background: '#131519',
+      upBody: '#A0F24E',
+      downBody: '#DADADA',
+      upBorder: '#B5FF6B',
+      downBorder: '#FFFAFA',
+      upWick: '#7E7E7E',
+      downWick: '#7E7E7E',
+    },
+  },
   {
     id: 'midnight',
     name: 'Midnight',
@@ -38,19 +52,6 @@ export const PRESET_THEMES: readonly Theme[] = [
       downBorder: '#854D0E',
       upWick: '#86EFAC',
       downWick: '#CA8A04',
-    },
-  },
-  {
-    id: 'ember',
-    name: 'Ember',
-    colors: {
-      background: '#1A0F0A',
-      upBody: '#FB923C',
-      downBody: '#7F1D1D',
-      upBorder: '#F97316',
-      downBorder: '#DC2626',
-      upWick: '#FDBA74',
-      downWick: '#EF4444',
     },
   },
   {
