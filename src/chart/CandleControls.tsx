@@ -1,4 +1,6 @@
+import { ChartLineUpIcon } from '@phosphor-icons/react';
 import type { CandleParams } from './types';
+import { SectionTitle } from '../ui/SectionTitle';
 import { Slider } from '../ui/Slider';
 import { RandomizeButton } from '../ui/RandomizeButton';
 
@@ -11,11 +13,8 @@ interface CandleControlsProps {
 
 export function CandleControls({ params, onChange, onApply, onRandomize }: CandleControlsProps) {
   return (
-    <section className="space-y-4 rounded-panel border border-line bg-surface p-3 shadow-panel">
-      <header className="flex items-center justify-between">
-        <h2 className="text-label text-fg-faint uppercase">Candles</h2>
-        <RandomizeButton label="Randomize candles" onClick={onRandomize} />
-      </header>
+    <div className="flex h-12 shrink-0 items-center gap-6 border-b border-line bg-surface px-4">
+      <SectionTitle icon={ChartLineUpIcon}>Sample data</SectionTitle>
 
       <Slider
         label="Trend"
@@ -44,13 +43,17 @@ export function CandleControls({ params, onChange, onApply, onRandomize }: Candl
         display={String(params.count)}
         onChange={(count) => onChange({ ...params, count })}
       />
-      <button
-        type="button"
-        onClick={onApply}
-        className="w-full cursor-pointer rounded-control bg-accent px-3 py-2 text-sm font-semibold text-accent-fg transition-colors duration-150 ease-soft hover:bg-accent-hover"
-      >
-        Apply
-      </button>
-    </section>
+
+      <div className="ml-auto flex items-center gap-2">
+        <RandomizeButton label="Randomize candles" onClick={onRandomize} />
+        <button
+          type="button"
+          onClick={onApply}
+          className="cursor-pointer rounded-control bg-accent px-3 py-1.5 text-xs font-semibold tracking-wide text-accent-fg transition-colors duration-150 ease-soft hover:bg-accent-hover"
+        >
+          Apply
+        </button>
+      </div>
+    </div>
   );
 }

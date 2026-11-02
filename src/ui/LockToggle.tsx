@@ -17,7 +17,7 @@ export function LockToggle({ locked, label, onToggle }: LockToggleProps) {
       aria-label={text}
       title={text}
       className={`cursor-pointer rounded-control p-1 transition-colors duration-150 ease-soft hover:bg-hover ${
-        locked ? 'text-accent' : 'text-fg-faint hover:text-fg'
+        locked ? 'text-accent-ink' : 'text-fg-faint hover:text-fg'
       }`}
     >
       {locked ? <LockSimpleIcon size={16} weight="fill" /> : <LockSimpleOpenIcon size={16} />}

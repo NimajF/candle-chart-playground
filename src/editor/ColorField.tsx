@@ -46,7 +46,7 @@ export function ColorField({ label, value, onChange, popoverAlign = 'left' }: Co
         aria-label={`${label} hex value`}
         className="w-[7ch] min-w-0 flex-1 bg-transparent font-data text-xs text-fg uppercase outline-none"
       />
-      <span className="opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
+      <span className="absolute inset-y-1 right-1 flex items-center bg-field opacity-0 transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100">
         <CopyButton value={value} label={`Copy ${label} color`} />
       </span>
 

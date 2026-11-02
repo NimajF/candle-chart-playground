@@ -20,7 +20,7 @@ export function RandomizeButton({ label, onClick, isDisabled }: RandomizeButtonP
         <DiceFiveIcon
           size={18}
           weight="bold"
-          className="-rotate-12 text-accent transition-transform duration-300 ease-soft group-enabled:group-hover:rotate-12 group-enabled:group-active:rotate-180 group-disabled:text-fg-faint"
+          className="-rotate-12 text-accent-ink transition-transform duration-300 ease-soft group-enabled:group-hover:rotate-12 group-enabled:group-active:rotate-180 group-disabled:text-fg-faint"
         />
         Randomize
       </button>

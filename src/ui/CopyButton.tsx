@@ -24,7 +24,7 @@ export function CopyButton({ value, label }: CopyButtonProps) {
       className="cursor-pointer rounded-control p-1 text-fg-muted hover:bg-hover hover:text-fg"
     >
       {copied ? (
-        <CheckIcon size={16} weight="bold" className="text-accent" />
+        <CheckIcon size={16} weight="bold" className="text-accent-ink" />
       ) : (
         <CopyIcon size={16} />
       )}

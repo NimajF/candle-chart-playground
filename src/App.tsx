@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import { SwatchesIcon, TagIcon } from '@phosphor-icons/react';
+import { SectionTitle } from './ui/SectionTitle';
 import { useAppTheme } from './app-theme/useAppTheme';
 import { ThemeToggle } from './ui/ThemeToggle';
 import type { Theme } from './theme/model';
 import type { Candle, CandleParams } from './chart/types';
 import { CandleChart } from './chart/CandleChart';
-import { ThemePicker } from './editor/ThemePicker';
+import { ThemeList, ThemeListHeader } from './editor/ThemeList';
+import { ThemeListDialog } from './editor/ThemeListDialog';
+import { pickVisibleThemes } from './editor/visibleThemes';
 import { ColorEditor } from './editor/ColorEditor';
 import { CandleControls } from './chart/CandleControls';
 import { generateRandomCandlesColors, type ColorLocks } from './theme/randomColors';
@@ -33,7 +37,15 @@ export default function App() {
   const editor = useThemeEditor(presetAsCopy(PRESET_THEMES[0]));
   const savedThemes = useSavedThemes();
 
+  const [isThemeListOpen, setIsThemeListOpen] = useState(false);
+  const visibleThemes = pickVisibleThemes(savedThemes.themes, PRESET_THEMES, editor.base.id);
+
   const [pendingConfirm, setPendingConfirm] = useState<ConfirmRequest | null>(null);
+
+  function handlePickTheme(theme: Theme) {
+    setIsThemeListOpen(false);
+    handleSelectTheme(isPresetId(theme.id) ? presetAsCopy(theme) : theme);
+  }
 
   function handleSave() {
     const theme: Theme = {
@@ -99,85 +111,118 @@ export default function App() {
   }
 
   return (
-    <div
-      className={
-        isFullscreen
-          ? 'h-dvh bg-canvas text-fg'
-          : 'min-h-dvh bg-canvas text-fg lg:grid lg:grid-cols-[minmax(0,1fr)_22rem]'
-      }
-    >
-      <section
+    <div className="flex h-dvh flex-col overflow-hidden bg-canvas text-fg">
+      {!isFullscreen && (
+        <header className="flex h-14 shrink-0 items-center gap-3 border-b border-line bg-surface px-4">
+          <h1 className="text-base font-semibold">Theme Playground</h1>
+
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleReset}
+              disabled={!editor.isDirty}
+              className="cursor-pointer rounded-control px-3 py-1.5 text-sm font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:bg-hover hover:text-fg focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none disabled:cursor-not-allowed disabled:text-fg-faint disabled:hover:bg-transparent"
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={!editor.isDirty}
+              className="cursor-pointer rounded-control bg-accent px-4 py-1.5 text-sm font-semibold text-accent-fg shadow-accent transition-colors duration-150 ease-soft hover:bg-accent-hover focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-field disabled:text-fg-faint disabled:shadow-none"
+            >
+              Save
+            </button>
+            <span className="mx-1 h-6 w-px bg-line" aria-hidden="true" />
+            <ThemeToggle theme={appTheme.theme} onToggle={appTheme.toggleTheme} />
+          </div>
+        </header>
+      )}
+      <div
         className={
           isFullscreen
-            ? 'h-dvh bg-canvas'
-            : 'sticky top-0 z-10 h-[45dvh] border-b border-line bg-canvas p-4 lg:h-dvh lg:border-r lg:border-b-0'
+            ? 'grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)]'
+            : 'grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_20rem]'
         }
       >
-        <div className={`relative h-full overflow-hidden ${isFullscreen ? '' : 'rounded-panel'}`}>
-          <CandleChart colors={editor.colors} candles={candles} />
-          <div className="absolute top-3 left-3 z-10">
-            <FullscreenToggle isFullscreen={isFullscreen} onToggle={fullscreen.toggleFullscreen} />
+        <section className="flex min-h-0 flex-col">
+          {!isFullscreen && (
+            <CandleControls
+              params={candleParams}
+              onChange={setCandleParams}
+              onApply={handleApplyCandleParams}
+              onRandomize={handleRandomizeCandles}
+            />
+          )}
+          <div className="relative min-h-0 flex-1">
+            <CandleChart colors={editor.colors} candles={candles} />
+            <div className="absolute top-3 left-3 z-10">
+              <FullscreenToggle
+                isFullscreen={isFullscreen}
+                onToggle={fullscreen.toggleFullscreen}
+              />
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <aside className={isFullscreen ? 'hidden' : 'space-y-4 p-4'}>
-        <header className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold">Theme Playground</h1>
-          <ThemeToggle theme={appTheme.theme} onToggle={appTheme.toggleTheme} />
-        </header>
+        {!isFullscreen && (
+          <aside className="flex min-h-0 flex-col gap-5 overflow-x-hidden overflow-y-auto border-l border-line bg-surface p-4">
+            <section className="space-y-2">
+              <header className="flex items-center justify-between">
+                <SectionTitle icon={SwatchesIcon}>Themes</SectionTitle>
+                <button
+                  type="button"
+                  onClick={() => setIsThemeListOpen(true)}
+                  className="cursor-pointer text-xs font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:text-fg"
+                >
+                  View all ({PRESET_THEMES.length + savedThemes.themes.length})
+                </button>
+              </header>
+              <div className="-mx-4">
+                <ThemeListHeader />
+                <ThemeList
+                  themes={visibleThemes}
+                  activeId={editor.base.id}
+                  onSelect={handlePickTheme}
+                />
+              </div>
+            </section>
 
-        <ThemePicker
-          title="Presets"
-          themes={PRESET_THEMES}
+            <hr className="border-line" />
+
+            <label className="block space-y-2.5">
+              <SectionTitle icon={TagIcon} as="span">
+                Name
+              </SectionTitle>
+              <input
+                type="text"
+                value={editor.themeName}
+                onChange={(e) => editor.setThemeName(e.target.value)}
+                placeholder="Theme Name"
+                className="w-full rounded-control border border-line-strong bg-field px-3 py-2 text-sm font-semibold text-fg outline-none transition-colors duration-150 ease-soft placeholder:text-fg-faint hover:bg-hover focus:border-accent-line focus:ring-4 focus:ring-accent-soft"
+              />
+            </label>
+
+            <hr className="border-line" />
+
+            <ColorEditor
+              colors={editor.colors}
+              onChange={editor.setColor}
+              onRandomize={handleRandomizeCandleColors}
+            />
+          </aside>
+        )}
+      </div>
+      {isThemeListOpen && (
+        <ThemeListDialog
+          presets={PRESET_THEMES}
+          saved={savedThemes.themes}
           activeId={editor.base.id}
-          onSelect={(theme) => handleSelectTheme(presetAsCopy(theme))}
-        />
-        <ThemePicker
-          title="Saved"
-          emptyMessage="No saved themes yet. Edit a theme and press Save."
-          themes={savedThemes.themes}
-          activeId={editor.base.id}
-          onSelect={handleSelectTheme}
+          onSelect={handlePickTheme}
           onDelete={handleDelete}
+          onClose={() => setIsThemeListOpen(false)}
         />
-
-        <input
-          type="text"
-          value={editor.themeName}
-          onChange={(e) => editor.setThemeName(e.target.value)}
-          placeholder="Theme Name"
-          aria-label="Theme name"
-          className="w-full rounded-control border border-line-strong bg-field px-3 py-2.5 text-sm font-medium tracking-wide text-fg outline-none transition-colors duration-150 ease-soft placeholder:text-fg-faint hover:bg-hover focus:border-accent-line focus:ring-4 focus:ring-accent-soft"
-        />
-        <CandleControls
-          params={candleParams}
-          onChange={setCandleParams}
-          onApply={handleApplyCandleParams}
-          onRandomize={handleRandomizeCandles}
-        />
-        <ColorEditor
-          colors={editor.colors}
-          onChange={editor.setColor}
-          onRandomize={handleRandomizeCandleColors}
-        />
-        <button
-          type="button"
-          onClick={handleSave}
-          className="w-full cursor-pointer rounded-control bg-accent px-3 py-2.5 text-sm font-semibold tracking-wide text-accent-fg shadow-accent transition-colors duration-150 ease-soft hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-soft disabled:cursor-not-allowed disabled:bg-field disabled:text-fg-faint disabled:shadow-none"
-          disabled={!editor.isDirty}
-        >
-          Save
-        </button>
-        <button
-          type="button"
-          onClick={handleReset}
-          className="w-full cursor-pointer rounded-control border border-line-strong bg-field px-3 py-2.5 text-sm font-semibold tracking-wide text-fg transition-colors duration-150 ease-soft hover:bg-hover focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-soft disabled:cursor-not-allowed disabled:border-line disabled:text-fg-faint disabled:hover:bg-field"
-          disabled={!editor.isDirty}
-        >
-          Reset
-        </button>
-      </aside>
+      )}
       {pendingConfirm && (
         <ConfirmDialog
           title={pendingConfirm.title}
