@@ -33,7 +33,7 @@ export function ColorField({ label, value, onChange, popoverAlign = 'left' }: Co
         type="button"
         onClick={() => setOpen(!open)}
         style={{ backgroundColor: value }}
-        className="size-5 shrink-0 cursor-pointer rounded-[6px] border border-line-strong"
+        className="size-5 shrink-0 cursor-pointer rounded-md border border-line-strong"
         aria-label={`Pick ${label} color`}
       />
       <input
