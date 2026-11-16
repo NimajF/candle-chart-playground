@@ -1,73 +1,42 @@
-# React + TypeScript + Vite
+# Candle Theme Playground
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Design color themes for candlestick charts, tweak them live and copy the result into your project.
 
-Currently, two official plugins are available:
+- Edit candle body, border, wick and background colors with a live preview
+- Randomize colors (with per-color locks) and candle data
+- Start from presets, save your own themes in the browser
+- Light and dark app themes, fullscreen chart
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Charts are powered by [TradingView Lightweight Charts™](https://www.tradingview.com/). Candles are randomly generated: synthetic data, not real market data.
 
-## React Compiler
+## Development
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+pnpm install
+pnpm dev       # dev server
+pnpm build     # type-check and production build into dist/
+pnpm lint
+pnpm format
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+The app is a static Vite + React SPA with no backend. Saved themes live in `localStorage`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+## Deploy
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+Any static host works. Build command `pnpm build`, output directory `dist`.
+
+## Credits
+
+| Name | By | License |
+| --- | --- | --- |
+| [Lightweight Charts™](https://www.tradingview.com/) | TradingView | Apache-2.0 |
+| [React](https://react.dev) | Meta | MIT |
+| [Phosphor Icons](https://phosphoricons.com) | Phosphor | MIT |
+| [Motion](https://motion.dev) | Motion | MIT |
+| [react-colorful](https://github.com/omgovich/react-colorful) | Vlad Shilov | MIT |
+| [Inter](https://rsms.me/inter/) | Rasmus Andersson | OFL-1.1 |
+| [JetBrains Mono](https://www.jetbrains.com/lp/mono/) | JetBrains | OFL-1.1 |
+
+This project is not affiliated with or endorsed by TradingView.
+
+Copyright © Benjamin Francisco. All rights reserved.

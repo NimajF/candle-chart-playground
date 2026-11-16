@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
       // Apply the saved app theme before first paint to avoid a dark flash
@@ -15,9 +18,30 @@
     </script>
 
     <title>Candle Theme Playground</title>
+    <meta
+      name="description"
+      content="Design color themes for candlestick charts. Tweak candle, wick and background colors live, randomize, save presets and copy them into your project."
+    />
+    <meta name="theme-color" content="#f5f5f5" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#08080a" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Candle Theme Playground" />
+    <meta property="og:title" content="Candle Theme Playground" />
+    <meta
+      property="og:description"
+      content="Design color themes for candlestick charts and copy them into your project."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Candle Theme Playground" />
+    <meta
+      name="twitter:description"
+      content="Design color themes for candlestick charts and copy them into your project."
+    />
   </head>
   <body>
     <div id="root"></div>
+    <noscript>Candle Theme Playground needs JavaScript to run.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
