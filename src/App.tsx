@@ -17,13 +17,14 @@ import { useSavedThemes } from './saved-themes/useSavedThemes';
 import { ConfirmDialog, type ConfirmRequest } from './ui/ConfirmDialog';
 import { useFullscreen } from './layout/useFullscreen';
 import { FullscreenToggle } from './ui/FullscreenToggle';
-
 import {
   DEFAULT_CANDLE_PARAMS,
   generateCandles,
   generateRandomCandlesParams,
 } from './chart/generateCandles';
 import { PRESET_THEMES, isPresetId, presetAsCopy } from './theme/presets';
+import { InfoDialog } from './ui/InfoDialog';
+import { InfoButton } from './ui/InfoButton';
 
 export default function App() {
   const appTheme = useAppTheme();
@@ -39,6 +40,8 @@ export default function App() {
 
   const [isThemeListOpen, setIsThemeListOpen] = useState(false);
   const visibleThemes = pickVisibleThemes(savedThemes.themes, PRESET_THEMES, editor.base.id);
+
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const [pendingConfirm, setPendingConfirm] = useState<ConfirmRequest | null>(null);
 
@@ -114,25 +117,10 @@ export default function App() {
     <div className="flex h-dvh flex-col overflow-hidden bg-canvas text-fg">
       {!isFullscreen && (
         <header className="flex h-14 shrink-0 items-center gap-3 border-b border-line bg-surface px-4">
-          <h1 className="text-base font-semibold">Theme Playground</h1>
+          <h1 className="text-base font-semibold">Candle Theme Playground</h1>
 
           <div className="ml-auto flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleReset}
-              disabled={!editor.isDirty}
-              className="cursor-pointer rounded-control px-3 py-1.5 text-sm font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:bg-hover hover:text-fg focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none disabled:cursor-not-allowed disabled:text-fg-faint disabled:hover:bg-transparent"
-            >
-              Reset
-            </button>
-            <button
-              type="button"
-              onClick={handleSave}
-              disabled={!editor.isDirty}
-              className="cursor-pointer rounded-control bg-accent px-4 py-1.5 text-sm font-semibold text-accent-fg shadow-accent transition-colors duration-150 ease-soft hover:bg-accent-hover focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-field disabled:text-fg-faint disabled:shadow-none"
-            >
-              Save
-            </button>
+            <InfoButton onClick={() => setIsInfoOpen(true)} />
             <span className="mx-1 h-6 w-px bg-line" aria-hidden="true" />
             <ThemeToggle theme={appTheme.theme} onToggle={appTheme.toggleTheme} />
           </div>
@@ -166,7 +154,8 @@ export default function App() {
         </section>
 
         {!isFullscreen && (
-          <aside className="flex min-h-0 flex-col gap-5 overflow-x-hidden overflow-y-auto border-l border-line bg-surface p-4">
+          <aside className="flex min-h-0 flex-col border-l border-line bg-surface">
+            <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-x-hidden overflow-y-auto p-4">
             <section className="space-y-2">
               <header className="flex items-center justify-between">
                 <SectionTitle icon={SwatchesIcon}>Themes</SectionTitle>
@@ -210,6 +199,26 @@ export default function App() {
               onChange={editor.setColor}
               onRandomize={handleRandomizeCandleColors}
             />
+            </div>
+
+            <footer className="flex shrink-0 items-center gap-2 border-t border-line bg-surface p-4">
+              <button
+                type="button"
+                onClick={handleReset}
+                disabled={!editor.isDirty}
+                className="flex-1 cursor-pointer rounded-control border border-line-strong px-3 py-2 text-sm font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:bg-hover hover:text-fg focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none disabled:cursor-not-allowed disabled:text-fg-faint disabled:hover:bg-transparent"
+              >
+                Reset
+              </button>
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={!editor.isDirty}
+                className="flex-1 cursor-pointer rounded-control bg-accent px-4 py-2 text-sm font-semibold text-accent-fg shadow-accent transition-colors duration-150 ease-soft hover:bg-accent-hover focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-field disabled:text-fg-faint disabled:shadow-none"
+              >
+                Save
+              </button>
+            </footer>
           </aside>
         )}
       </div>
@@ -236,6 +245,7 @@ export default function App() {
           onCancel={() => setPendingConfirm(null)}
         />
       )}
+      {isInfoOpen && <InfoDialog onClose={() => setIsInfoOpen(false)} />}
     </div>
   );
 }
