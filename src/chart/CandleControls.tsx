@@ -13,8 +13,10 @@ interface CandleControlsProps {
 
 export function CandleControls({ params, onChange, onApply, onRandomize }: CandleControlsProps) {
   return (
-    <div className="flex h-12 shrink-0 items-center gap-6 border-b border-line bg-surface px-4">
-      <SectionTitle icon={ChartLineUpIcon}>Sample data</SectionTitle>
+    <div className="flex min-h-12 shrink-0 flex-wrap items-center gap-x-6 gap-y-2 border-b border-line bg-surface px-4 py-2">
+      <SectionTitle icon={ChartLineUpIcon}>
+        <span className="whitespace-nowrap">Sample data</span>
+      </SectionTitle>
 
       <Slider
         label="Trend"
@@ -44,7 +46,7 @@ export function CandleControls({ params, onChange, onApply, onRandomize }: Candl
         onChange={(count) => onChange({ ...params, count })}
       />
 
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex shrink-0 items-center gap-2">
         <RandomizeButton label="Randomize candles" onClick={onRandomize} />
         <button
           type="button"
