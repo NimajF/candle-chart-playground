@@ -5,11 +5,13 @@ import '@fontsource-variable/jetbrains-mono';
 import './index.css';
 import App from './App.tsx';
 import { ErrorBoundary } from './ui/ErrorBoundary.tsx';
+import { Analytics } from '@vercel/analytics/react';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
       <App />
+      <Analytics />
     </ErrorBoundary>
   </StrictMode>,
 );
