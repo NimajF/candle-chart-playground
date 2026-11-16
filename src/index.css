@@ -17,3 +17,67 @@ body {
 .react-colorful__hue {
   border-radius: 0 0 8px 8px;
 }
+
+/* Minimal slider: accent fill + accent dot on a faint track */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  --track: color-mix(in oklab, var(--color-fg) 14%, transparent);
+}
+.slider::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--color-accent-ink) var(--fill), var(--track) var(--fill));
+}
+.slider::-moz-range-track {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--track);
+}
+.slider::-moz-range-progress {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--color-accent-ink);
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -4.5px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-accent-ink);
+  box-shadow: 0 0 0 0 var(--color-accent-soft);
+  transition: transform 150ms var(--ease-soft), box-shadow 150ms var(--ease-soft);
+}
+.slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-accent-ink);
+  box-shadow: 0 0 0 0 var(--color-accent-soft);
+  transition: transform 150ms var(--ease-soft), box-shadow 150ms var(--ease-soft);
+}
+.slider:hover::-webkit-slider-thumb,
+.slider:focus-visible::-webkit-slider-thumb {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 5px var(--color-accent-soft);
+}
+.slider:hover::-moz-range-thumb,
+.slider:focus-visible::-moz-range-thumb {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 5px var(--color-accent-soft);
+}
+.slider:active::-webkit-slider-thumb {
+  transform: scale(1.4);
+  box-shadow: 0 0 0 7px var(--color-accent-soft);
+}
+.slider:active::-moz-range-thumb {
+  transform: scale(1.4);
+  box-shadow: 0 0 0 7px var(--color-accent-soft);
+}

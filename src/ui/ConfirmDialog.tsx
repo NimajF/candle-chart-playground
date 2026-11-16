@@ -54,18 +54,17 @@ export function ConfirmDialog({
         <button
           type="button"
           onClick={onCancel}
-          className="cursor-pointer rounded-control border border-line-strong bg-surface-raised px-4 py-2 text-sm font-semibold text-fg transition-colors duration-150 ease-soft hover:bg-hover"
+          className="cursor-pointer rounded-control bg-hover px-3 py-1.5 text-xs font-semibold tracking-wide text-fg transition-colors duration-150 ease-soft hover:bg-line-strong"
         >
           Cancel
         </button>
-        {/* Both buttons have a 1px border so they end up the same size */}
         <button
           type="button"
           onClick={onConfirm}
-          className={`cursor-pointer rounded-control border px-4 py-2 text-sm font-semibold transition-colors duration-150 ease-soft ${
+          className={`cursor-pointer rounded-control px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors duration-150 ease-soft ${
             danger
-              ? 'border-danger/40 bg-danger/15 text-danger hover:bg-danger/25'
-              : 'border-transparent bg-accent text-accent-fg hover:bg-accent-hover'
+              ? 'bg-danger text-danger-fg hover:bg-danger-hover'
+              : 'bg-accent text-accent-fg hover:bg-accent-hover'
           }`}
         >
           {confirmLabel}

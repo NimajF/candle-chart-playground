@@ -19,7 +19,8 @@ export function Slider({ label, value, min, max, step, display, onChange }: Slid
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-24 cursor-pointer accent-accent-ink"
+        style={{ '--fill': `${((value - min) / (max - min)) * 100}%` } as React.CSSProperties}
+        className="slider w-24"
       />
       <span className="min-w-[6ch] font-data text-xs text-fg tabular-nums">{display}</span>
     </label>

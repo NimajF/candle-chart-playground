@@ -20,6 +20,8 @@
   --color-accent-line: color-mix(in oklab, var(--color-accent-ink) 45%, transparent);
 
   --color-danger: #ff6b6b;
+  --color-danger-hover: #ff8585;
+  --color-danger-fg: #1a0505;
   --color-warning: #f2b45a; /* unsaved / edited state */
 
   --shadow-panel: var(--app-shadow-panel);
@@ -76,6 +78,8 @@
   --color-accent-soft: color-mix(in oklab, var(--color-accent) 28%, transparent);
 
   --color-danger: #cf304a;
+  --color-danger-hover: #b92740;
+  --color-danger-fg: #ffffff;
   --color-warning: #a35f00;
 
   --app-shadow-panel: 0 1px 2px rgb(30 35 41 / 0.04);
