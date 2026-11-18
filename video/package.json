@@ -1,0 +1,23 @@
+{
+  "name": "candle-chart-playground-video",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render Promo out/promo.mp4",
+    "render:preview": "remotion render Promo out/preview.mp4 --scale=0.5"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "2.1.10",
+    "@remotion/cli": "4.0.542",
+    "@remotion/google-fonts": "4.0.542",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "remotion": "4.0.542"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "typescript": "~6.0.3"
+  }
+}
