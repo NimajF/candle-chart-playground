@@ -117,7 +117,14 @@ export default function App() {
     <div className="flex h-dvh flex-col overflow-hidden bg-canvas text-fg">
       {!isFullscreen && (
         <header className="flex h-14 shrink-0 items-center gap-3 border-b border-line bg-surface px-4">
-          <h1 className="text-base font-semibold">Candle Theme Playground</h1>
+          <h1 className="text-base font-semibold">
+            <a
+              href="/"
+              className="rounded-sm transition-colors duration-150 ease-soft hover:text-fg-muted focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none"
+            >
+              Candle Theme Playground
+            </a>
+          </h1>
 
           <div className="ml-auto flex items-center gap-2">
             <InfoButton onClick={() => setIsInfoOpen(true)} />
@@ -156,49 +163,49 @@ export default function App() {
         {!isFullscreen && (
           <aside className="flex min-h-0 flex-col border-l border-line bg-surface">
             <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-x-hidden overflow-y-auto p-4">
-            <section className="space-y-2">
-              <header className="flex items-center justify-between">
-                <SectionTitle icon={SwatchesIcon}>Themes</SectionTitle>
-                <button
-                  type="button"
-                  onClick={() => setIsThemeListOpen(true)}
-                  className="cursor-pointer text-xs font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:text-fg"
-                >
-                  View all ({PRESET_THEMES.length + savedThemes.themes.length})
-                </button>
-              </header>
-              <div className="-mx-4">
-                <ThemeListHeader />
-                <ThemeList
-                  themes={visibleThemes}
-                  activeId={editor.base.id}
-                  onSelect={handlePickTheme}
+              <section className="space-y-2">
+                <header className="flex items-center justify-between">
+                  <SectionTitle icon={SwatchesIcon}>Themes</SectionTitle>
+                  <button
+                    type="button"
+                    onClick={() => setIsThemeListOpen(true)}
+                    className="cursor-pointer text-xs font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:text-fg"
+                  >
+                    View all ({PRESET_THEMES.length + savedThemes.themes.length})
+                  </button>
+                </header>
+                <div className="-mx-4">
+                  <ThemeListHeader />
+                  <ThemeList
+                    themes={visibleThemes}
+                    activeId={editor.base.id}
+                    onSelect={handlePickTheme}
+                  />
+                </div>
+              </section>
+
+              <hr className="border-line" />
+
+              <label className="block space-y-2.5">
+                <SectionTitle icon={TagIcon} as="span">
+                  Name
+                </SectionTitle>
+                <input
+                  type="text"
+                  value={editor.themeName}
+                  onChange={(e) => editor.setThemeName(e.target.value)}
+                  placeholder="Theme Name"
+                  className="w-full rounded-control border border-line-strong bg-field px-3 py-2 text-sm font-semibold text-fg outline-none transition-colors duration-150 ease-soft placeholder:text-fg-faint hover:bg-hover focus:border-accent-line focus:ring-4 focus:ring-accent-soft"
                 />
-              </div>
-            </section>
+              </label>
 
-            <hr className="border-line" />
+              <hr className="border-line" />
 
-            <label className="block space-y-2.5">
-              <SectionTitle icon={TagIcon} as="span">
-                Name
-              </SectionTitle>
-              <input
-                type="text"
-                value={editor.themeName}
-                onChange={(e) => editor.setThemeName(e.target.value)}
-                placeholder="Theme Name"
-                className="w-full rounded-control border border-line-strong bg-field px-3 py-2 text-sm font-semibold text-fg outline-none transition-colors duration-150 ease-soft placeholder:text-fg-faint hover:bg-hover focus:border-accent-line focus:ring-4 focus:ring-accent-soft"
+              <ColorEditor
+                colors={editor.colors}
+                onChange={editor.setColor}
+                onRandomize={handleRandomizeCandleColors}
               />
-            </label>
-
-            <hr className="border-line" />
-
-            <ColorEditor
-              colors={editor.colors}
-              onChange={editor.setColor}
-              onRandomize={handleRandomizeCandleColors}
-            />
             </div>
 
             <footer className="flex shrink-0 items-center gap-2 border-t border-line bg-surface p-4">

@@ -1,0 +1,45 @@
+/* Browser surfaces the landing themes from the palette instead of leaving defaults. */
+html {
+  scrollbar-color: var(--color-line-strong) var(--color-canvas);
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+/* Candles draw in left to right once, like the app's chart reveal. */
+@keyframes candles-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.candles-reveal {
+  animation: candles-reveal 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+/* Palette changes fade, like the app's 200 ms color fade, only slower so they read. */
+.tint {
+  transition:
+    fill 900ms var(--ease-soft),
+    stroke 900ms var(--ease-soft),
+    background-color 900ms var(--ease-soft),
+    color 900ms var(--ease-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .candles-reveal {
+    animation: none;
+  }
+  .tint {
+    transition: none;
+  }
+}
