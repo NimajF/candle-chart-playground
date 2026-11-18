@@ -59,8 +59,9 @@ export function InfoDialog({ onClose }: InfoDialogProps) {
           <h3 className="text-xs font-semibold tracking-wide text-fg uppercase">Privacy</h3>
           <p>
             Your saved themes and light/dark preference are stored only in your browser
-            (localStorage). They are never sent to any server. This site uses no cookies, no
-            analytics and no trackers. Our hosting provider may keep standard technical logs, such
+            (localStorage). They are never sent to any server. This site uses no cookies and no
+            trackers. We use Vercel Web Analytics to count page views in aggregate, without
+            cookies or personal data. Our hosting provider may keep standard technical logs, such
             as IP addresses.
           </p>
         </section>
