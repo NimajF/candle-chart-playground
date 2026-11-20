@@ -3,4 +3,7 @@
   <url>
     <loc>https://candle-chart-playground.vercel.app/</loc>
   </url>
+  <url>
+    <loc>https://candle-chart-playground.vercel.app/app</loc>
+  </url>
 </urlset>
