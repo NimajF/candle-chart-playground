@@ -13,6 +13,7 @@ import { generateRandomCandlesColors, type ColorLocks } from './theme/randomColo
 import { useThemeEditor } from './editor/useThemeEditor';
 import { useSavedThemes } from './saved-themes/useSavedThemes';
 import { ConfirmDialog, type ConfirmRequest } from './ui/ConfirmDialog';
+import { TradingViewDialog } from './tradingview/TradingViewDialog';
 import { useFullscreen } from './layout/useFullscreen';
 import { useIsMobile } from './layout/useIsMobile';
 import { Sidebar } from './layout/Sidebar';
@@ -44,6 +45,7 @@ export default function App() {
   const [isThemeListOpen, setIsThemeListOpen] = useState(false);
   const visibleThemes = pickVisibleThemes(savedThemes.themes, PRESET_THEMES, editor.base.id);
 
+  const [isTradingViewOpen, setIsTradingViewOpen] = useState(false);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const [pendingConfirm, setPendingConfirm] = useState<ConfirmRequest | null>(null);
@@ -219,6 +221,7 @@ export default function App() {
               onRandomizeColors={handleRandomizeCandleColors}
               onReset={handleReset}
               onSave={handleSave}
+              onOpenTradingView={() => setIsTradingViewOpen(true)}
             />
           ))}
       </div>
@@ -244,6 +247,13 @@ export default function App() {
             setPendingConfirm(null);
           }}
           onCancel={() => setPendingConfirm(null)}
+        />
+      )}
+      {isTradingViewOpen && (
+        <TradingViewDialog
+          colors={editor.colors}
+          themeName={editor.themeName}
+          onClose={() => setIsTradingViewOpen(false)}
         />
       )}
       {isInfoOpen && <InfoDialog onClose={() => setIsInfoOpen(false)} />}

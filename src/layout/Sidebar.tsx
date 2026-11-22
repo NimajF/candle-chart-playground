@@ -1,10 +1,10 @@
-import { SwatchesIcon, TagIcon } from '@phosphor-icons/react';
 import type { Theme } from '../theme/model';
 import type { ColorLocks } from '../theme/randomColors';
 import type { ThemeEditor } from '../editor/useThemeEditor';
 import { SectionTitle } from '../ui/SectionTitle';
 import { ThemeList, ThemeListHeader } from '../editor/ThemeList';
 import { ColorEditor } from '../editor/ColorEditor';
+import { QuestionIcon, SwatchesIcon, TagIcon } from '@phosphor-icons/react';
 
 interface SidebarProps {
   editor: ThemeEditor;
@@ -15,6 +15,7 @@ interface SidebarProps {
   onRandomizeColors: (locks: ColorLocks) => void;
   onReset: () => void;
   onSave: () => void;
+  onOpenTradingView: () => void;
 }
 
 // Desktop: the editor column on the right of the chart.
@@ -27,6 +28,7 @@ export function Sidebar({
   onRandomizeColors,
   onReset,
   onSave,
+  onOpenTradingView,
 }: SidebarProps) {
   return (
     <aside className="flex min-h-0 flex-col border-l border-line bg-surface">
@@ -65,25 +67,40 @@ export function Sidebar({
 
         <hr className="border-line" />
 
-        <ColorEditor colors={editor.colors} onChange={editor.setColor} onRandomize={onRandomizeColors} />
+        <ColorEditor
+          colors={editor.colors}
+          onChange={editor.setColor}
+          onRandomize={onRandomizeColors}
+        />
       </div>
 
-      <footer className="flex shrink-0 items-center gap-2 border-t border-line bg-surface p-4">
+      <footer className="shrink-0 space-y-3 border-t border-line bg-surface p-4">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onReset}
+            disabled={!editor.isDirty}
+            className="flex-1 cursor-pointer rounded-control border border-line-strong px-3 py-2 text-sm font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:bg-hover hover:text-fg focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none disabled:cursor-not-allowed disabled:text-fg-faint disabled:hover:bg-transparent"
+          >
+            Reset
+          </button>
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={!editor.isDirty}
+            className="flex-1 cursor-pointer rounded-control bg-accent px-4 py-2 text-sm font-semibold text-accent-fg shadow-accent transition-colors duration-150 ease-soft hover:bg-accent-hover focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-field disabled:text-fg-faint disabled:shadow-none"
+          >
+            Save
+          </button>
+        </div>
+
         <button
           type="button"
-          onClick={onReset}
-          disabled={!editor.isDirty}
-          className="flex-1 cursor-pointer rounded-control border border-line-strong px-3 py-2 text-sm font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:bg-hover hover:text-fg focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none disabled:cursor-not-allowed disabled:text-fg-faint disabled:hover:bg-transparent"
+          onClick={onOpenTradingView}
+          className="mx-auto flex cursor-pointer items-center gap-1.5 rounded-sm text-xs font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:text-fg focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none"
         >
-          Reset
-        </button>
-        <button
-          type="button"
-          onClick={onSave}
-          disabled={!editor.isDirty}
-          className="flex-1 cursor-pointer rounded-control bg-accent px-4 py-2 text-sm font-semibold text-accent-fg shadow-accent transition-colors duration-150 ease-soft hover:bg-accent-hover focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-field disabled:text-fg-faint disabled:shadow-none"
-        >
-          Save
+          <QuestionIcon size={14} />
+          How to use in TradingView
         </button>
       </footer>
     </aside>
