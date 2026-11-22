@@ -11,7 +11,7 @@ interface SliderProps {
 export function Slider({ label, value, min, max, step, display, onChange }: SliderProps) {
   return (
     <label className="flex items-center gap-2 text-sm whitespace-nowrap">
-      <span className="text-fg-muted">{label}</span>
+      <span className="text-fg-muted max-md:w-20">{label}</span>
       <input
         type="range"
         min={min}
@@ -20,9 +20,9 @@ export function Slider({ label, value, min, max, step, display, onChange }: Slid
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         style={{ '--fill': `${((value - min) / (max - min)) * 100}%` } as React.CSSProperties}
-        className="slider w-24"
+        className="slider w-24 max-md:w-auto max-md:flex-1"
       />
-      <span className="min-w-[6ch] font-data text-xs text-fg tabular-nums">{display}</span>
+      <span className="min-w-[6ch] text-xs font-medium text-fg tabular-nums">{display}</span>
     </label>
   );
 }

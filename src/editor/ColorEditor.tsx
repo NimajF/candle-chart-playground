@@ -13,6 +13,8 @@ interface ColorEditorProps {
   onRandomize: (locks: ColorLocks) => void;
 }
 
+// Desktop editor (the sidebar). Mobile uses MobileColorEditor.
+
 // Each candle part has an up and a down color, shown side by side.
 const CANDLE_ROWS: { label: string; up: ColorKey; down: ColorKey }[] = [
   { label: 'Body', up: 'upBody', down: 'downBody' },

@@ -3,8 +3,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import { ArrowRightIcon } from '@phosphor-icons/react';
 import { HeroBackdrop } from './HeroBackdrop';
 import { CopyDemo, LockDemo, ShuffleDemo } from './PointDemos';
-import { PRESET_THEMES } from '../theme/presets';
-import { ThemeSwatchLogo } from './ThemeSwatchLogo';
+import { BrandLogo } from '../ui/BrandLogo';
 
 // Where the playground lives (served from app.html).
 const APP_PATH = '/app';
@@ -107,7 +106,7 @@ export function Landing() {
           aria-label="Candle Theme Playground"
           className="flex items-center gap-2.5 rounded-control text-[15px] font-semibold focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none"
         >
-          <ThemeSwatchLogo colors={PRESET_THEMES[0].colors} />
+          <BrandLogo size={28} />
           <span className="hidden sm:inline">Candle Theme Playground</span>
         </a>
         <OpenButton size="sm" />

@@ -1,10 +1,18 @@
 @import 'tailwindcss';
 @import './styles/tokens.css';
 
+html {
+  /* No double-tap zoom on phones, so tapping a button twice fast (Randomize) never zooms.
+     Pinch zoom still works. */
+  touch-action: manipulation;
+}
+
 body {
   background-color: var(--color-canvas);
   color: var(--color-fg);
   font-family: var(--font-ui);
+  /* Remove the grey/blue flash mobile browsers draw on tapped elements; buttons have their own states */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .react-colorful {
@@ -80,4 +88,20 @@ body {
 .slider:active::-moz-range-thumb {
   transform: scale(1.4);
   box-shadow: 0 0 0 7px var(--color-accent-soft);
+}
+
+/* Touch screens: a taller hit area and a bigger thumb, so it's easy to grab with a finger */
+@media (pointer: coarse) {
+  .slider {
+    height: 32px;
+  }
+  .slider::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+    margin-top: -8.5px; /* centers it on the 3px track: (3 - 20) / 2 */
+  }
+  .slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+  }
 }
