@@ -4,7 +4,8 @@ import type { ThemeEditor } from '../editor/useThemeEditor';
 import { SectionTitle } from '../ui/SectionTitle';
 import { ThemeList, ThemeListHeader } from '../editor/ThemeList';
 import { ColorEditor } from '../editor/ColorEditor';
-import { QuestionIcon, SwatchesIcon, TagIcon } from '@phosphor-icons/react';
+import { CopyIcon, SwatchesIcon, TagIcon } from '@phosphor-icons/react';
+import { TradingViewLink } from '../tradingview/TradingViewLink';
 
 interface SidebarProps {
   editor: ThemeEditor;
@@ -15,6 +16,7 @@ interface SidebarProps {
   onRandomizeColors: (locks: ColorLocks) => void;
   onReset: () => void;
   onSave: () => void;
+  onSaveAsNew: () => void;
   onOpenTradingView: () => void;
 }
 
@@ -28,6 +30,7 @@ export function Sidebar({
   onRandomizeColors,
   onReset,
   onSave,
+  onSaveAsNew,
   onOpenTradingView,
 }: SidebarProps) {
   return (
@@ -96,12 +99,16 @@ export function Sidebar({
 
         <button
           type="button"
-          onClick={onOpenTradingView}
-          className="mx-auto flex cursor-pointer items-center gap-1.5 rounded-sm text-xs font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:text-fg focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none"
+          onClick={onSaveAsNew}
+          disabled={!editor.isDirty}
+          title="Keep the original and save your changes as a separate theme"
+          className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-control border border-line-strong px-3 py-2 text-sm font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:bg-hover hover:text-fg focus-visible:ring-4 focus-visible:ring-accent-soft focus-visible:outline-none disabled:cursor-not-allowed disabled:text-fg-faint disabled:hover:bg-transparent"
         >
-          <QuestionIcon size={14} />
-          How to use in TradingView
+          <CopyIcon size={16} />
+          Save as new theme
         </button>
+
+        <TradingViewLink onClick={onOpenTradingView} />
       </footer>
     </aside>
   );

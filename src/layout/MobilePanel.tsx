@@ -10,6 +10,7 @@ import { MobileColorEditor } from '../editor/MobileColorEditor';
 import { CandleControls } from '../chart/CandleControls';
 import { InfoButton } from '../ui/InfoButton';
 import { ThemeToggle } from '../ui/ThemeToggle';
+import { TradingViewLink } from '../tradingview/TradingViewLink';
 
 type MobileTab = 'colors' | 'themes' | 'data';
 
@@ -32,6 +33,7 @@ interface MobilePanelProps {
   appTheme: AppTheme;
   onToggleAppTheme: () => void;
   onOpenInfo: () => void;
+  onOpenTradingView: () => void;
 }
 
 // Mobile: the panel below the chart.
@@ -42,11 +44,14 @@ export function MobilePanel(props: MobilePanelProps) {
     <aside className="flex min-h-0 flex-col border-t border-line bg-surface">
       <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain p-4">
         {tab === 'colors' && (
-          <MobileColorEditor
-            colors={props.editor.colors}
-            onChange={props.editor.setColor}
-            onRandomize={props.onRandomizeColors}
-          />
+          <div className="space-y-4">
+            <MobileColorEditor
+              colors={props.editor.colors}
+              onChange={props.editor.setColor}
+              onRandomize={props.onRandomizeColors}
+            />
+            <TradingViewLink onClick={props.onOpenTradingView} />
+          </div>
         )}
 
         {tab === 'themes' && (

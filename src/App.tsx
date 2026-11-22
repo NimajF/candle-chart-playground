@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowCounterClockwiseIcon } from '@phosphor-icons/react';
+import { ArrowCounterClockwiseIcon, CopyIcon } from '@phosphor-icons/react';
 import { useAppTheme } from './app-theme/useAppTheme';
 import { ThemeToggle } from './ui/ThemeToggle';
 import type { Theme } from './theme/model';
@@ -55,14 +55,28 @@ export default function App() {
     handleSelectTheme(isPresetId(theme.id) ? presetAsCopy(theme) : theme);
   }
 
-  function handleSave() {
-    const theme: Theme = {
-      id: isPresetId(editor.base.id) ? crypto.randomUUID() : editor.base.id,
+  function buildTheme(id: string) {
+    return {
+      id,
       name: editor.themeName.trim() || 'Untitled Theme',
       colors: editor.colors,
     };
+  }
+
+  function persistTheme(theme: Theme) {
     savedThemes.saveTheme(theme);
     editor.loadTheme(theme);
+  }
+
+  function handleSave() {
+    persistTheme(buildTheme(isPresetId(editor.base.id) ? crypto.randomUUID() : editor.base.id));
+  }
+
+  function handleSaveAsNew() {
+    const theme = buildTheme(crypto.randomUUID());
+    // Same name as the original: add a suffix so the two don't look identical in the list
+    if (theme.name === editor.base.name) theme.name = `${theme.name} copy`;
+    persistTheme(theme);
   }
 
   function handleReset() {
@@ -155,6 +169,16 @@ export default function App() {
               </button>
               <button
                 type="button"
+                onClick={handleSaveAsNew}
+                disabled={!editor.isDirty}
+                title="Keep the original and save your changes as a separate theme"
+                className="flex cursor-pointer items-center gap-1 rounded-control px-2 py-1.5 text-xs font-semibold text-fg-muted transition-colors duration-150 ease-soft hover:bg-hover hover:text-fg disabled:cursor-not-allowed disabled:text-fg-faint disabled:hover:bg-transparent"
+              >
+                <CopyIcon size={16} />
+                Save as new
+              </button>
+              <button
+                type="button"
                 onClick={handleSave}
                 disabled={!editor.isDirty}
                 className="cursor-pointer rounded-control bg-accent px-4 py-1.5 text-sm font-semibold text-accent-fg shadow-accent transition-colors duration-150 ease-soft hover:bg-accent-hover disabled:cursor-not-allowed disabled:bg-field disabled:text-fg-faint disabled:shadow-none"
@@ -210,6 +234,7 @@ export default function App() {
               appTheme={appTheme.theme}
               onToggleAppTheme={appTheme.toggleTheme}
               onOpenInfo={() => setIsInfoOpen(true)}
+              onOpenTradingView={() => setIsTradingViewOpen(true)}
             />
           ) : (
             <Sidebar
@@ -221,6 +246,7 @@ export default function App() {
               onRandomizeColors={handleRandomizeCandleColors}
               onReset={handleReset}
               onSave={handleSave}
+              onSaveAsNew={handleSaveAsNew}
               onOpenTradingView={() => setIsTradingViewOpen(true)}
             />
           ))}
