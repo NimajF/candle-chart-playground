@@ -47,7 +47,7 @@ export function InfoDialog({ onClose }: InfoDialogProps) {
 
       <div className="space-y-5 p-5 text-sm text-fg-muted">
         <section className="space-y-1.5">
-          <h3 className="text-xs font-semibold tracking-wide text-fg uppercase">Disclaimer</h3>
+          <h3 className="text-sm font-semibold tracking-wide text-fg">Disclaimer</h3>
           <p>
             The candles are randomly generated. They are synthetic data, not real market data, and
             nothing here is financial advice. The software is provided "as is", without warranty of
@@ -56,18 +56,18 @@ export function InfoDialog({ onClose }: InfoDialogProps) {
         </section>
 
         <section className="space-y-1.5">
-          <h3 className="text-xs font-semibold tracking-wide text-fg uppercase">Privacy</h3>
+          <h3 className="text-sm font-semibold tracking-wide text-fg">Privacy</h3>
           <p>
             Your saved themes and light/dark preference are stored only in your browser
             (localStorage). They are never sent to any server. This site uses no cookies and no
-            trackers. We use Vercel Web Analytics to count page views in aggregate, without
-            cookies or personal data. Our hosting provider may keep standard technical logs, such
-            as IP addresses.
+            trackers. We use Vercel Web Analytics to count page views in aggregate, without cookies
+            or personal data. Our hosting provider may keep standard technical logs, such as IP
+            addresses.
           </p>
         </section>
 
         <section className="space-y-1.5">
-          <h3 className="text-xs font-semibold tracking-wide text-fg uppercase">Credits</h3>
+          <h3 className="text-sm font-semibold tracking-wide text-fg">Credits</h3>
           <p>
             Charts powered by{' '}
             <a

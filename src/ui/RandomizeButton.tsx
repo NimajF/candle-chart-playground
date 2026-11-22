@@ -22,6 +22,7 @@ export function RandomizeButton({ label, onClick, isDisabled }: RandomizeButtonP
           weight="bold"
           className="-rotate-12 text-accent-ink transition-transform duration-300 ease-soft group-enabled:group-hover:rotate-12 group-enabled:group-active:rotate-180 group-disabled:text-fg-faint"
         />
+        {/* Always with text: a lone dice icon doesn't say what it does */}
         Randomize
       </button>
     </span>

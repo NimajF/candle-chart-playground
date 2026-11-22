@@ -54,7 +54,9 @@ export function ThemeList({ themes, activeId, onSelect, onDelete }: ThemeListPro
                 onClick={() => onDelete(theme)}
                 aria-label={`Delete ${theme.name}`}
                 title={`Delete ${theme.name}`}
-                className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer rounded-control bg-hover p-1 text-fg-muted opacity-0 transition-opacity group-hover:opacity-100 hover:text-danger focus-visible:opacity-100"
+                className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer rounded-control bg-hover p-1 text-fg-muted opacity-0 transition-opacity group-hover:opacity-100 hover:text-danger focus-visible:opacity-100 pointer-coarse:opacity-100"
+                // pointer-coarse = touch screens: there is no hover, so the button is always visible.
+                // Otherwise it would be invisible but still tappable over the Down column.
               >
                 <TrashIcon size={14} />
               </button>

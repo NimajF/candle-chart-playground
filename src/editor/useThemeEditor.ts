@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { COLOR_KEYS, type ColorKey, type Theme, type ThemeColors } from '../theme/model';
 
+// Everything the hook returns, so components can receive the whole editor as one prop.
+export type ThemeEditor = ReturnType<typeof useThemeEditor>;
+
 export function useThemeEditor(initialTheme: Theme) {
   const [base, setBase] = useState<Theme>(initialTheme); // the loaded theme, never modified
   const [themeName, setThemeName] = useState(initialTheme.name); // the name of the theme being edited

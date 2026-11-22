@@ -21,6 +21,7 @@ const RIGHT_OFFSET = 5; // empty bars after the last candle
 const MAX_VISIBLE = 100; // dont squeeze huge series
 const REVEAL_MS = 500; // candles drawing in left to right
 const COLOR_FADE_MS = 200;
+const CHART_FONT = "'Inter Variable', 'Inter', system-ui, sans-serif"; // same as --font-ui
 
 export function CandleChart({ colors, candles }: CandleChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -35,6 +36,8 @@ export function CandleChart({ colors, candles }: CandleChartProps) {
 
     const chart = createChart(container, {
       autoSize: true,
+      // Same font as the rest of the UI (the chart draws on a canvas, so CSS doesn't reach it)
+      layout: { fontFamily: CHART_FONT },
       grid: { vertLines: { visible: false }, horzLines: { visible: false } },
       timeScale: { rightOffset: RIGHT_OFFSET },
       crosshair: { mode: CrosshairMode.Normal },
@@ -44,6 +47,10 @@ export function CandleChart({ colors, candles }: CandleChartProps) {
 
     chartRef.current = chart;
     seriesRef.current = series;
+
+    // A canvas doesn't wait for web fonts. If Inter wasn't loaded yet on the first draw,
+    // set the font again once it is, so the axes redraw with it.
+    document.fonts.ready.then(() => chartRef.current?.applyOptions({ layout: { fontFamily: CHART_FONT } }));
 
     return () => {
       chart.remove();
